@@ -19,11 +19,24 @@ const CustomNodeWrapper = (nodeProps: NodeProps<NodeData>) => {
   const setSelectedNode = useGraph(state => state.setSelectedNode);
   const setVisible = useModal(state => state.setVisible);
   const colorScheme = useComputedColorScheme();
+  const clickTimeRef = React.useRef<number>(0);
 
   const handleNodeClick = React.useCallback(
     (_: React.MouseEvent<SVGGElement, MouseEvent>, data: NodeData) => {
       if (setSelectedNode) setSelectedNode(data);
-      setVisible("NodeModal", true);
+      
+      // Detect double-click
+      const now = Date.now();
+      const isDoubleClick = now - clickTimeRef.current < 300;
+      clickTimeRef.current = now;
+
+      if (isDoubleClick) {
+        // Double-click: open edit modal
+        setVisible("EditNodeModal", true);
+      } else {
+        // Single-click: open view modal
+        setVisible("NodeModal", true);
+      }
     },
     [setSelectedNode, setVisible]
   );

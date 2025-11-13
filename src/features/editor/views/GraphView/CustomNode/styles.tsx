@@ -30,7 +30,8 @@ export const StyledForeignObject = styled.foreignObject<{ $isObject?: boolean }>
   font-size: 12px;
   font-weight: 500;
   overflow: hidden;
-  pointer-events: none;
+  /* allow children (buttons/controls) to receive pointer events so edit buttons work */
+  pointer-events: all;
 
   &.searched {
     background: rgba(27, 255, 0, 0.1);
